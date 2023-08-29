@@ -59,8 +59,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
         [HttpPost]
         public JsonResult CheckIDDuplicate(string idNumber)
         {
-            // Perform a check against your data source (e.g., database) to see if the ID number is duplicate.
-            // Replace this logic with your actual implementation.
+        
 
             bool isDuplicate = _userService.IsIdNumberDuplicated(idNumber);
 
