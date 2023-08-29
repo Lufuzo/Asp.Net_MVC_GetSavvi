@@ -1,0 +1,56 @@
+﻿body {
+
+
+}
+.body-content {
+   /* padding-left: 15px;
+    padding-right: 15px;*/
+}
+.containerLog {
+    position: absolute;
+   
+    bottom: 250px;
+    width: 150%; /* To make sure it spans the full width */
+}
+.menu {
+    background-color: #333;
+    color: white;
+    top:auto;
+}
+
+    .menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .menu ul li {
+            padding: 10px 20px;
+        }
+
+            .menu ul li a {
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+            }
+
+.auth-links a {
+    background-color: #4CAF50;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-left: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+    .auth-links a:hover {
+        background-color: #45a049;
+    }
+.is-invalid {
+    border-color: #dc3545;
+}
+
+
