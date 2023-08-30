@@ -3,14 +3,14 @@
 
 }
 .body-content {
-   /* padding-left: 15px;
+    /*padding-left: 15px;
     padding-right: 15px;*/
 }
 .containerLog {
     position: absolute;
    
-    bottom: 250px;
-    width: 150%; 
+    bottom: 100px;
+    width: 0%; 
 }
 .menu {
     background-color: #333;

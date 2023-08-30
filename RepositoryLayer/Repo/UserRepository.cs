@@ -3,6 +3,7 @@ using Entities.Models;
 using ServiceLayer.IService;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,14 +23,29 @@ namespace ServiceLayer.Service
 
         }
 
-        public Task<string> Delete(int id)
+        public Users Delete(int id, Users users)
         {
-            throw new NotImplementedException();
+            var record = _usersContext.Users.Find(id);
+
+              _usersContext.Users.Remove(record);
+
+             _usersContext.SaveChanges();
+
+            return record;
+
+
         }
 
-        public Task<Users> Get(Users users)
+        public  Users Get(int id)
         {
-            throw new NotImplementedException();
+
+
+            // var record = await Task.Run(() => _usersContext.Users.Find(id));
+            var record =  _usersContext.Users.Find(id);
+
+
+            return record;
+
         }
 
         public async Task<IEnumerable<Users>> GetAll()
@@ -37,12 +53,12 @@ namespace ServiceLayer.Service
             return await Task.Run(() => _usersContext.Users.ToList());
         }
 
-        public async Task<Users> Insert(Users users)
+        public Users Insert(Users users)
         {
             try
             {
 
-                await Task.Run(() => _usersContext.Users.Add(users));
+                 _usersContext.Users.Add(users);
                  _usersContext.SaveChanges();
             }
             catch (Exception ex)
@@ -53,9 +69,41 @@ namespace ServiceLayer.Service
             return users;
         }
 
-        public Task<string> Update(int id, Users users)
+        public Users Update(int id, Users users)
         {
-            throw new NotImplementedException();
+
+            var record = _usersContext.Users.Find(id);
+            try
+            {
+                if (id != record.usersId)
+                {
+                    throw new Exception("Record does not exist in the database");
+                
+                }
+                else
+                { 
+
+                    record.Name = users.Name;
+                    record.Email = users.Email; 
+                    record.Surname = users.Surname;
+                    record.IdNumber = users.IdNumber;
+                    record.Mobile = users.Mobile;
+
+                    _usersContext.Entry(record).State = EntityState.Modified;
+                    _usersContext.SaveChanges();
+
+
+                }
+           
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return users;
+
         }
 
 

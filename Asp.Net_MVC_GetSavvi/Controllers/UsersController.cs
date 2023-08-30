@@ -5,6 +5,7 @@ using ServiceLayer.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -13,7 +14,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
 {
     public class UsersController : Controller
     {
-        UserService _userService = new UserService();
+      private readonly UserService _userService = new UserService();
 
         public UsersController()
         {
@@ -43,6 +44,8 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
         }
 
 
+
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -50,12 +53,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             return View();
         }
 
-
-
-
         #region Methods
-
-
         [HttpPost]
         public JsonResult CheckIDDuplicate(string idNumber)
         {
@@ -73,9 +71,9 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
 
             Users user = new Users();
 
-            // useModel.loginId = 1;
+           //  useModel.loginId = 1;
 
-            if (ModelState.IsValid)
+           if (ModelState.IsValid)
             {
 
                 user.Name = useModel.Name;
@@ -83,26 +81,84 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 user.IdNumber = useModel.IdNumber;
                 user.Email = useModel.Email;
                 user.Mobile = useModel.Mobile;
-                user.loginId = useModel.loginId;
+                //user.loginId = useModel.loginId;
 
                 _userService.Insert(user);
+           }
+
+            return RedirectToAction("IndexDisplay");
+        }
+
+        #region 
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public ActionResult Update(int? id)
+        {
+            if (id.HasValue)
+            {
+                Users us = new Users();
+                var record = _userService.Get(id.Value);
+               
+                if (record == null)
+                {
+                    return View();
+                }
+                us.Surname = record.Surname;
+                us.Name = record.Name;
+                us.Email = record.Email;
+                us.IdNumber = record.IdNumber;
+                us.Mobile = record.Mobile;
+
+                return View(us);
+            }
+            else
+            {
+                return View();
+            }
+        }
+ 
+        [HttpPost]
+        public ActionResult Update(int? id, UserModel userModel)
+        {
+
+           Users user = new Users();
+
+            
+            if (id.HasValue)
+            {
+                user.Surname = userModel.Surname;
+                user.IdNumber = userModel.IdNumber;
+                user.Name = userModel.Name;
+                user.Mobile = userModel.Mobile;
+                user.Email = userModel.Email;
+                user.usersId = userModel.usersId;
+
+                _userService.Update(id.Value, user);
             }
 
             return RedirectToAction("IndexDisplay");
         }
 
-        #region CRUD To be completed
-
-        [HttpPut]
-        public ActionResult Edit(int id)
-        {
-
-            return RedirectToAction("IndexDisplay");
-        }
-
-        [HttpDelete]
+        [HttpGet]
         public ActionResult Delete(int id)
         {
+            var record = _userService.Get(id);
+            return View(record);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, UserModel userModel)
+        {
+            Users user = new Users();
+
+            user.Surname = userModel.Surname;
+            user.IdNumber = userModel.IdNumber;
+            user.Name = userModel.Name;
+            user.Mobile = userModel.Mobile;
+            user.Email = userModel.Email;
+            user.usersId = userModel.usersId;
+            _userService.Delete(id,user);
 
             return RedirectToAction("IndexDisplay");
         }

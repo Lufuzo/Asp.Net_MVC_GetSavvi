@@ -23,14 +23,14 @@ namespace ServiceLayer.Service
         }
 
 
-        public Task<string> Delete(int id)
+        public Users Delete(int id, Users users)
         {
-            throw new NotImplementedException();
+           return usersRepository.Delete(id, users);
         }
 
-        public Task<Users> Get(Users users)
+        public Users Get(int id)
         {
-            throw new NotImplementedException();
+            return usersRepository.Get(id);
         }
 
         public Task<IEnumerable<Users>> GetAll()
@@ -38,14 +38,14 @@ namespace ServiceLayer.Service
            return usersRepository.GetAll();
         }
 
-        public Task<Users> Insert(Users users)
+        public Users Insert(Users users)
         {
             return usersRepository.Insert(users);
         }
 
-        public Task<string> Update(int id, Users users)
+        public Users Update(int id, Users users)
         {
-            throw new NotImplementedException();
+            return usersRepository.Update(id,users);
         }
 
        public bool IsIdNumberDuplicated(string idNumber)

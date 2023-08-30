@@ -62,7 +62,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                     Session["LoginId"] = loginId;
 
                     // Valid login, redirect to a page
-                    return RedirectToAction("DisplayCredentials", "Login");
+                    return RedirectToAction("IndexDisplay", "Users");
                 }
                 else
                 {
@@ -129,6 +129,13 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 }         
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult Edit()
+        {
+
+            return View("Edit");
         }
 
         [HttpPut]

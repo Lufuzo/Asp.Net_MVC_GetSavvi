@@ -12,14 +12,12 @@
     
 <div class="form-horizontal">
     <hr />
-
-
-    @if (!string.IsNullOrEmpty(ViewBag.LoginId))
+ @*@if (!string.IsNullOrEmpty(ViewBag.LoginId))
     {
         <div class="alert alert-success">
             @ViewBag.LoginId
         </div>
-    }
+    }*@
     <form id="UserFrm" asp-action="Create" method="post">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -43,7 +41,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "MobileNumber", @placeholder = "Enter mobile" } })
+                @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "Mobile", @placeholder = "Enter mobile" } })
                 @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -51,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.IdNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IdNumber, new { htmlAttributes = new { @class = "form-control", @id = "IDNumber", @placeholder = "Enter idNumber" } })
+                @Html.EditorFor(model => model.IdNumber, new { htmlAttributes = new { @class = "form-control", @id = "IdNumber", @placeholder = "Enter idNumber" } })
                 @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -59,18 +57,18 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "emailAdress", @placeholder = "Enter  email" } })
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Enter  email" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.loginId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.loginId, new { @class = "form-control", @value = ViewBag.LoginId, @disabled = "disabled" })
                 @Html.ValidationMessageFor(model => model.loginId, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -103,17 +101,17 @@
                 }
 
                 // Mobile Number contains only numeric characters and has the correct length
-                var mobileNumber = $("#MobileNumber").val();
+                var mobileNumber = $("#Mobile).val()");
                 if (!/^\d+$/.test(mobileNumber) || (mobileNumber.length < 10 || mobileNumber.length > 11)) {
                     valid = false;
-                    $("#MobileNumber").addClass("error");
+                    $("#Mobile").addClass("error");
                 }
 
                 // ID Number has the correct length and is not duplicate
-                var idNumber = $("#IDNumber").val();
+                var idNumber = $("#IdNumber").val();
                 if (idNumber.length !== 13) {
                     valid = false;
-                    $("#IDNumber").addClass("error");
+                    $("#IdNumber").addClass("error");
                 } else {
        
                     $.ajax({
@@ -124,16 +122,16 @@
                         success: function (result) {
                             if (result.duplicate) {
                                 valid = false;
-                                $("#IDNumber").addClass("error");
+                                $("#IdNumber").addClass("error");
                             }
                         }
                     });
                 }
 
                 // Username contains only alphanumeric characters
-                if (!/^[a-zA-Z0-9]+$/.test($("#Username").val())) {
+                if (!/^[a-zA-Z0-9]+$/.test($("Email").val())) {
                     valid = false;
-                    $("#Username").addClass("error");
+                    $("#Email").addClass("error");
                 }
 
                 // Prevent form submission if any validation failed
@@ -150,5 +148,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "IndexDisplay", "Users")
 </div>

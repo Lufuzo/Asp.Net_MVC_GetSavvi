@@ -9,10 +9,10 @@ namespace ServiceLayer.IService
     public interface IUserRepository
     {
         Task<IEnumerable<Users>> GetAll();
-        Task<Users> Get(Users users);
-        Task<Users> Insert(Users users);
-        Task<string> Update(int id, Users users);
-        Task<string> Delete(int id);
+        Users Get(int id);
+        Users Insert(Users users);
+        Users Update(int id, Users users);
+        Users Delete(int id, Users users);
 
         bool IsIdNumberDuplicated(string idNumber);
 
