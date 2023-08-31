@@ -21,11 +21,11 @@ namespace Asp.Net_MVC_GetSavvi.Models
         [Required(ErrorMessage = "Please enter phone number")]
         [Display(Name = "Home Phone")]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        [StringLength(10, MinimumLength = 0, ErrorMessage = "Phone must have 10.")]
         public string Mobile { get; set; }
 
         [Required(ErrorMessage = "Please enter valid id")]
-        [StringLength(11, MinimumLength = 0)]
+        [StringLength(13, MinimumLength = 0)]
         public string IdNumber { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]

@@ -1,5 +1,6 @@
 ﻿using Asp.Net_MVC_GetSavvi.Models;
 using Entities.Models;
+using Microsoft.AspNet.Identity;
 using ServiceLayer.IService;
 using ServiceLayer.Service;
 using System;
@@ -12,6 +13,9 @@ using System.Web.Mvc;
 
 namespace Asp.Net_MVC_GetSavvi.Controllers
 {
+
+    //To Prevent URL Rewrite
+   // [Authorize]
     public class UsersController : Controller
     {
       private readonly UserService _userService = new UserService();
@@ -26,8 +30,11 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             _userService = userService;
         }
 
+
+        #region CRUD methods
+
         [HttpGet]
-        // GET: Users
+       // GET: Users
         public ActionResult Index()
         {
 
@@ -43,53 +50,54 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             return View(data);
         }
 
-
-
-
         [HttpGet]
         public ActionResult Create()
         {
 
-            return View();
+          return View();
         }
 
-        #region Methods
-        [HttpPost]
-        public JsonResult CheckIDDuplicate(string idNumber)
-        {
-        
-
-            bool isDuplicate = _userService.IsIdNumberDuplicated(idNumber);
-
-            return Json(new { duplicate = isDuplicate });
-        }
-
-        #endregion
+        ///[Authorize()]
         [HttpPost]
         public ActionResult Create(UserModel useModel)
         {
 
             Users user = new Users();
 
-           //  useModel.loginId = 1;
-
-           if (ModelState.IsValid)
+            var result = IsValid(useModel.IdNumber);
+            if (result == true)
             {
-
                 user.Name = useModel.Name;
                 user.Surname = useModel.Surname;
                 user.IdNumber = useModel.IdNumber;
                 user.Email = useModel.Email;
-                user.Mobile = useModel.Mobile;
-                //user.loginId = useModel.loginId;
 
-                _userService.Insert(user);
-           }
+                //checking the phone number if its valvalid
+                if (useModel.Mobile == null || !(useModel.Mobile is string mobile))
+                {
+                    ViewBag.ErrorMessage = "Phone Number is not valid";
+                    return View();
+                }
+                // checking the leading zero
+                if (useModel.Mobile.StartsWith("0"))
+                {
+                    // replacing leading zero with 27
+                    useModel.Mobile = "27" + useModel.Mobile.Substring(1);
+
+                    user.Mobile = useModel.Mobile;
+                    _userService.Insert(user);
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "ID Number is not valid";
+                return View();
+
+            }
 
             return RedirectToAction("IndexDisplay");
         }
 
-        #region 
 
         [HttpGet]
         [Route("{id:int}")]
@@ -99,7 +107,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             {
                 Users us = new Users();
                 var record = _userService.Get(id.Value);
-               
+
                 if (record == null)
                 {
                     return View();
@@ -117,29 +125,43 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 return View();
             }
         }
- 
+
         [HttpPost]
         public ActionResult Update(int? id, UserModel userModel)
         {
 
-           Users user = new Users();
-
-            
+            Users user = new Users();
             if (id.HasValue)
             {
-                user.Surname = userModel.Surname;
-                user.IdNumber = userModel.IdNumber;
-                user.Name = userModel.Name;
-                user.Mobile = userModel.Mobile;
-                user.Email = userModel.Email;
-                user.usersId = userModel.usersId;
 
-                _userService.Update(id.Value, user);
+                var result = IsValid(userModel.IdNumber);
+                if (result == true)
+                {
+                    user.Name = userModel.Name;
+                    user.Surname = userModel.Surname;
+                    user.IdNumber = userModel.IdNumber;
+                    user.Email = userModel.Email;
+
+                    //checking the phone number if its valvalid
+                    if (userModel.Mobile == null || !(userModel.Mobile is string mobile))
+                    {
+                        ViewBag.ErrorMessage = "Phone Number is not valid";
+                        return View();
+                    }
+                    // checking the leading zero
+                    if (userModel.Mobile.StartsWith("0"))
+                    {
+                        // replacing leading zero with 27
+                        userModel.Mobile = "27" + userModel.Mobile.Substring(1);
+
+                        user.Mobile = userModel.Mobile;
+                        _userService.Update(id.Value, user);
+                    }
+                }
             }
 
             return RedirectToAction("IndexDisplay");
         }
-
         [HttpGet]
         public ActionResult Delete(int id)
         {
@@ -158,10 +180,71 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             user.Mobile = userModel.Mobile;
             user.Email = userModel.Email;
             user.usersId = userModel.usersId;
-            _userService.Delete(id,user);
+            _userService.Delete(id, user);
 
             return RedirectToAction("IndexDisplay");
         }
+
         #endregion
+
+        #region Methods
+        [HttpPost]
+        public JsonResult CheckIDDuplicate(string idNumber)
+        {
+        
+
+            bool isDuplicate = _userService.IsIdNumberDuplicated(idNumber);
+
+            return Json(new { duplicate = isDuplicate });
+        }
+        #endregion
+
+
+
+        #region SA ID Validation
+
+        public bool IsValid(object value)
+        {
+            if (value == null || !(value is string idNumber))
+                return false;
+
+            if (idNumber.Length != 13 || !IsDigitsOnly(idNumber))
+                return false;
+
+            // Extract birthdate from ID number
+            int year = int.Parse(idNumber.Substring(0, 2));
+            int month = int.Parse(idNumber.Substring(2, 2));
+            int day = int.Parse(idNumber.Substring(4, 2));
+
+            int currentYear = DateTime.Now.Year % 100;
+            int currentMonth = DateTime.Now.Month;
+            int currentDay = DateTime.Now.Day;
+
+            int birthYear = year + 1900;
+            int yVal =  birthYear;
+
+            if (year >= currentYear)
+                birthYear += 100;
+
+            DateTime birthdate = new DateTime(yVal, month, day);
+
+            int age = DateTime.Now.Year - birthdate.Year;
+            if (birthdate > DateTime.Now.AddYears(-age))
+                age--;
+
+            return age >= 18 && age <= 65;
+        }
+
+        private bool IsDigitsOnly(string input)
+        {
+            foreach (char c in input)
+            {
+                if (!char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
     }
+
+    #endregion
 }

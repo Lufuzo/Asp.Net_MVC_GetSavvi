@@ -13,7 +13,7 @@
 <div class="form-horizontal">
    <hr/>
 
-    <form id="LoginFrm" asp-controller="LoginController" asp-action="Update" method="post">
+    <form id="LoginFrm" asp-action="Edit" method="post">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.loginId)
@@ -44,5 +44,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "DisplayCredentials", "Login")
 </div>

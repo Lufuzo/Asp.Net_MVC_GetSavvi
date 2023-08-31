@@ -12,7 +12,7 @@ namespace ServiceLayer.Service
 {
     public class UserRepository : IUserRepository
     {
-        UsersContext _usersContext = new UsersContext();
+        private readonly UsersContext _usersContext = new UsersContext();
 
         public UserRepository()
         {}
@@ -57,7 +57,14 @@ namespace ServiceLayer.Service
         {
             try
             {
-
+                // validating for duplicates records on IDnumber
+                bool isDuplicate = _usersContext.Users.Any(u => u.IdNumber == users.IdNumber);
+                if (isDuplicate)
+                {
+                   
+                    return  users;
+                }
+               
                  _usersContext.Users.Add(users);
                  _usersContext.SaveChanges();
             }

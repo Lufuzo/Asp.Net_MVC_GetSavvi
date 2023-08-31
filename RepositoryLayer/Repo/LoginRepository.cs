@@ -3,6 +3,7 @@ using Entities.Models;
 using ServiceLayer.IService;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -14,7 +15,7 @@ namespace ServiceLayer.Service
 {
     public class LoginRepository : ILoginRepository
     {
-        LoginContext _loginContext = new LoginContext();
+        private readonly LoginContext _loginContext = new LoginContext();
 
         public LoginRepository()
         {
@@ -52,7 +53,6 @@ namespace ServiceLayer.Service
 
         public LoginCredentials Insert(LoginCredentials login)
         {
-            string mess = string.Empty;
 
             try {
                 _loginContext.LoginEntities.Add(login);
@@ -74,23 +74,29 @@ namespace ServiceLayer.Service
         {
 
 
-            //try
-            //{
-            var cred =  await Task.Run(() => _loginContext.Entry(logins).State = EntityState.Modified);
-             _loginContext.SaveChanges();
-            return logins;
+            try
+            { 
+                   var record = _loginContext.LoginEntities.Find(id);
+                
+                    if (id != record.loginId)
+                    {
+                        throw new Exception("Record does not exist in the database");
 
+                    }
+                    else
+                    {
+                        var cred = await Task.Run(() => _loginContext.Entry(record).State = EntityState.Modified);
+                        _loginContext.SaveChanges();
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+                    }
 
-            //string mess = string.Empty;
-            //mess = "success";
+            }
+             catch (Exception ex)
+                {
+                    throw ex;
+                }
 
-            //return logins;
+                return logins;   
 
         }
         #region Addition Methods

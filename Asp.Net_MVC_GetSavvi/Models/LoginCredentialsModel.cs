@@ -10,7 +10,7 @@ namespace Asp.Net_MVC_GetSavvi.Models
     {
 
 
-         public int loginId { get; set; }
+        public int loginId { get; set; }
         [Required(ErrorMessage = "Please enter username.")]
         public string UserName { get; set; }
 

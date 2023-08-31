@@ -19,18 +19,17 @@ namespace Entities.Models
         [Required(ErrorMessage = "Please enter surname")]
         public string Surname { get; set; }
 
-      //  [Required(ErrorMessage = "Please enter phone number")]
+        [Required(ErrorMessage = "Please enter phone number")]
         //[Display(Name = "Home Phone")]
         //[DataType(DataType.PhoneNumber)]
         //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public string Mobile { get; set; }
 
-        //[Required(ErrorMessage = "Please enter valid id")]
-        //[StringLength(11, MinimumLength = 0)] 
+        [Required(ErrorMessage = "Please enter valid id")]
         public string IdNumber { get; set; }
 
         [Required(ErrorMessage = " Please enter Email.")]
-        // [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
        
       // [ForeignKey("")]

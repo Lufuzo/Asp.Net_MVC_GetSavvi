@@ -15,13 +15,15 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Web.UI.WebControls;
 using Microsoft.Ajax.Utilities;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Asp.Net_MVC_GetSavvi.Controllers
 {
+     // To Prevent URL ReWrite
+    // [Authorize]
     public class LoginController : Controller
     {
-        LoginService _loginService = new LoginService();
-
+      private readonly LoginService _loginService = new LoginService();
 
         public LoginController()
         {
@@ -32,18 +34,16 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             _loginService = loginService;
           
         }
-        
 
+        #region CRUD methods
 
         // GET: Login
         public ActionResult Index()
         {
-            
-           
+
             return View();
         }
 
-  
         [HttpPost]
         public async Task<ActionResult> Index(LoginCredentialsModel loginModel)
         {
@@ -55,13 +55,12 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 var loginCredentials = await _loginService.GetLoginCredentialByUsername(loginModel.UserName);
 
                 // to calculate attempts 
-               /// loginModel.FailedLoginAttempts < 3
-                if (loginCredentials != null && loginCredentials.Password == loginModel.Password  )
+                /// loginModel.FailedLoginAttempts < 3
+                if (loginCredentials != null && loginCredentials.Password == loginModel.Password)
                 {
 
-                   // int loginId = loginCredentials.loginId;
-                   // Session["LoginId"] = loginId;
-
+                    // int loginId = loginCredentials.loginId;
+                    // Session["LoginId"] = loginId;
                     // Valid login, redirect to a page
                     return RedirectToAction("IndexDisplay", "Users");
                 }
@@ -70,36 +69,38 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                     // Failed login
                     if (loginCredentials != null)
                     {
-                   //   loginCredentials.FailedLoginAttempts++;
-                       _loginService.UpdateLoggedUser(loginCredentials);
+                        //   loginCredentials.FailedLoginAttempts++;
+                        _loginService.UpdateLoggedUser(loginCredentials);
                     }
 
                     ModelState.AddModelError("", "Invalid username or password.");
+                    // looking the account after 3 times failling to log
 
                     //if (loginCredentials != null && loginCredentials.FailedLoginAttempts >= 3)
                     //{                       
                     //}
                 }
 
-
             }
             return View();
         }
 
+      // [Authorize]
         [HttpGet]
         public async Task<ActionResult> DisplayCredentials()
         {
-            var data = await  _loginService.GetAll();
-            
+            var data = await _loginService.GetAll();
+
 
             return View(data);
         }
         [HttpGet]
         public ActionResult Register()
         {
-           
+
             return View();
         }
+        // [Authorize]
         [HttpPost]
         public ActionResult Register(LoginCredentialsModel login, string confirmPassword)
         {
@@ -112,24 +113,38 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 {
                     loginEntity.UserName = login.UserName;
 
-                    // Save password Base64 encryption 
+                    // validating password
 
-                    string originalText = login.Password;
-                    byte[] bytesToEncode = Encoding.UTF8.GetBytes(originalText);
-                    string encodedText = Convert.ToBase64String(bytesToEncode);
-                    loginEntity.Password = encodedText;
+                    if (login.Password == null || !(login.Password is string password))
+                    {
 
-                    _loginService.Insert(loginEntity);
+                    }
+                    // Check for password length and check if it meets the  (numeric, upper case, lower case)
+                    if (login.Password.Length >= 8 &&
+                        login.Password.Any(char.IsDigit) &&
+                        login.Password.Any(char.IsUpper) &&
+                        login.Password.Any(char.IsLower))
+                    {
+                        // Save password Base64 encryption 
+                        // loginEntity.Password = login.Password;
+                        string originalText = login.Password;
+                        byte[] bytesToEncode = Encoding.UTF8.GetBytes(originalText);
+                        string encodedText = Convert.ToBase64String(bytesToEncode);
+                        loginEntity.Password = encodedText;
 
+                        _loginService.Insert(loginEntity);
+                    }
                 }
-                else {
+                else
+                {
 
                     ViewBag.ErrorMessage = "Password does not match";
                     return View();
-                }         
+                }
             }
             return RedirectToAction("DisplayCredentials");
         }
+
 
         [HttpGet]
         public ActionResult Edit(int? id)
@@ -149,7 +164,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 string encodedText = log.Password;
                 byte[] bytesToDecode = Convert.FromBase64String(encodedText);
                 string decodedText = Encoding.UTF8.GetString(bytesToDecode);
-                log.Password = decodedText;           
+                log.Password = decodedText;
 
                 return View(log);
             }
@@ -157,11 +172,11 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             {
                 return View();
             }
-           // return View("Edit");
+            // return View("Edit");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(int? id, LoginCredentialsModel loginModel)
+        public async Task<ActionResult> Edit(int? id, LoginCredentialsModel loginModel)
         {
 
             LoginCredentials log = new LoginCredentials();
@@ -177,12 +192,13 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
                 string encodedText = Convert.ToBase64String(bytesToEncode);
                 log.Password = encodedText;
 
-                
+
                 await _loginService.Update(id.Value, log);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("DisplayCredentials");
         }
+
 
         [HttpGet]
         public ActionResult Delete(int id)
@@ -192,7 +208,7 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteCred(int id, LoginCredentialsModel loginModel)
+        public ActionResult Delete(int id, LoginCredentialsModel loginModel)
         {
             LoginCredentials login = new LoginCredentials();
 
@@ -201,10 +217,11 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             _loginService.Delete(id, login);
 
 
-            return RedirectToAction("IndexDisplay");
+            return RedirectToAction("DisplayCredentials");
         }
 
 
+        #endregion
 
     }
 }

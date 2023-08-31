@@ -11,7 +11,7 @@
     <h4>LoginCredentials</h4>
     <hr />
 
-    <form id="delFrm" asp-controller="LoginController" asp-action="DeleteCred" method="post">
+    <form id="delFrm" asp-action="Delete" method="post">
         <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(model => model.UserName)
@@ -37,7 +37,7 @@
 
             <div class="form-actions no-color">
                 <input type="submit" value="Delete" class="btn btn-default" /> |
-                @Html.ActionLink("Back to List", "Index")
+                @Html.ActionLink("Back to List", "DisplayCredentials", "Login")
             </div>
         }
         </form>
