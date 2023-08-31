@@ -12,13 +12,13 @@
     
 <div class="form-horizontal">
     <hr />
- @*@if (!string.IsNullOrEmpty(ViewBag.LoginId))
-    {
-        <div class="alert alert-success">
-            @ViewBag.LoginId
-        </div>
-    }*@
-    <form id="UserFrm" asp-action="Create" method="post">
+    @*@if (!string.IsNullOrEmpty(ViewBag.LoginId))
+        {
+            <div class="alert alert-success">
+                @ViewBag.LoginId
+            </div>
+        }*@
+    <form id="CrUsFrm" asp-action="Create" method="post">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -33,8 +33,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", @id = "Surname", @placeholder = "Enter surname" }  })
+                @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", @id = "Surname", @placeholder = "Enter surname" } })
                 @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+                <small id="surnameError" class="text-danger"></small>
             </div>
         </div>
 
@@ -43,6 +44,7 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "Mobile", @placeholder = "Enter mobile" } })
                 @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                <small id="mobileError" class="text-danger"></small>
             </div>
         </div>
 
@@ -51,6 +53,7 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.IdNumber, new { htmlAttributes = new { @class = "form-control", @id = "IdNumber", @placeholder = "Enter idNumber" } })
                 @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
+                <small id="idNumberError" class="text-danger"></small>
             </div>
         </div>
 
@@ -59,88 +62,84 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Enter  email" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                <small id="emailError" class="text-danger"></small>
             </div>
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.loginId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.loginId, new { @class = "form-control", @value = ViewBag.LoginId, @disabled = "disabled" })
-                @Html.ValidationMessageFor(model => model.loginId, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default"/>
             </div>
         </div>
     </form>
 
     <script>
-        $(document).ready(function () {
-            $("#UserFrm").submit(function (event) {
-                var valid = true;
+        document.getElementById("CrUsFrm").addEventListener("submit", function (event) {
+            var nameField = document.getElementById("Name");
+            var nameError = document.getElementById("nameError");
 
-                // No empty fields
-                $("input[type=text], input[type=number]", this).each(function () {
-                    if ($(this).val() === "") {
-                        valid = false;
-                        $(this).addClass("error");
-                    }
-                });
+            if (usernameField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                nameError.textContent = "Name cannot be empty.";
+                nameField.classList.add("is-invalid");
+            } else {
+                nameError.textContent = "";
+                nameField.classList.remove("is-invalid");
+            }
 
-                // Name and Surname contain only alphabetical characters
-                if (!/^[a-zA-Z]+$/.test($("#Name").val())) {
-                    valid = false;
-                    $("#Name").addClass("error");
-                }
-                if (!/^[a-zA-Z]+$/.test($("#Surname").val())) {
-                    valid = false;
-                    $("#Surname").addClass("error");
-                }
+            var surnameField = document.getElementById("Surname");
+            var surnameError = document.getElementById("surnameError");
 
-                // Mobile Number contains only numeric characters and has the correct length
-                var mobileNumber = $("#Mobile).val()");
-                if (!/^\d+$/.test(mobileNumber) || (mobileNumber.length < 10 || mobileNumber.length > 11)) {
-                    valid = false;
-                    $("#Mobile").addClass("error");
-                }
+            if (surnameField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                surnameError.textContent = "Surname cannot be empty.";
+                surnameField.classList.add("is-invalid");
+            } else {
+                surnameError.textContent = "";
+                surnameField.classList.remove("is-invalid");
+            }
 
-                // ID Number has the correct length and is not duplicate
-                var idNumber = $("#IdNumber").val();
-                if (idNumber.length !== 13) {
-                    valid = false;
-                    $("#IdNumber").addClass("error");
-                } else {
-       
-                    $.ajax({
-                        url: "/Users/CheckIDDuplicate",
-                        type: "POST",
-                        data: { idNumber: idNumber },
-                        async: false,
-                        success: function (result) {
-                            if (result.duplicate) {
-                                valid = false;
-                                $("#IdNumber").addClass("error");
-                            }
-                        }
-                    });
-                }
+            var mobileField = document.getElementById("Mobile");
+            var mobileError = document.getElementById("mobilePasswordError");
 
-                // Username contains only alphanumeric characters
-                if (!/^[a-zA-Z0-9]+$/.test($("Email").val())) {
-                    valid = false;
-                    $("#Email").addClass("error");
-                }
+            if (mobileField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                mobileError.textContent = "Mobile cannot be empty.";
+                mobileField.classList.add("is-invalid");
+            } else {
+                mobileError.textContent = "";
+                mobileField.classList.remove("is-invalid");
+            }
 
-                // Prevent form submission if any validation failed
-                if (!valid) {
-                    event.preventDefault();
-                }
-            });
+            var idNumberField = document.getElementById("IdNumber");
+            var idNumberError = document.getElementById("idNumberError");
+
+            if (idNumberField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                idNumberError.textContent = "IdNumber cannot be empty.";
+                idNumberField.classList.add("is-invalid");
+            } else {
+                idNumberError.textContent = "";
+                idNumberField.classList.remove("is-invalid");
+            }
+
+            var emailField = document.getElementById("Email");
+            var emailError = document.getElementById("emailError");
+
+            if (emailField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                <a href="~/Views/Users/IndexDisplay.cshtml">~/Views/Users/IndexDisplay.cshtml</a>
+                emailError.textContent = "Email cannot be empty.";
+                emailField.classList.add("is-invalid");
+            } else {
+                emailError.textContent = "";
+                emailField.classList.remove("is-invalid");
+            }
         });
     </script>
+
+
 
 
 

@@ -11,21 +11,63 @@
             <div class="card">
                 <div class="card-header">Register</div>
                 <div class="card-body">
-                    <form asp-action="Register" method="post">
+                    <form id="RegFrm" asp-action="Register" method="post">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                            <small id="usernameError" class="text-danger"></small>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                            <small id="passwordError" class="text-danger"></small>
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword">Confirm Password</label>
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                            <small id="confirmPasswordError" class="text-danger"></small>
                         </div>
                         <button type="submit" class="btn btn-primary">Register</button>
                     </form>
+                    <script>
+                        document.getElementById("RegFrm").addEventListener("submit", function (event) {
+                            var usernameField = document.getElementById("username");
+                            var usernameError = document.getElementById("usernameError");
+
+                            if (usernameField.value.trim() === "") {
+                                event.preventDefault(); // Prevent form submission
+                                usernameError.textContent = "Username cannot be empty.";
+                                usernameField.classList.add("is-invalid");
+                            } else {
+                                usernameError.textContent = "";
+                                usernameField.classList.remove("is-invalid");
+                            }
+
+                            var passwordField = document.getElementById("password");
+                            var passwordError = document.getElementById("passwordError");
+
+                            if (passwordField.value.trim() === "") {
+                                event.preventDefault(); // Prevent form submission
+                                passwordError.textContent = "Password cannot be empty.";
+                                passwordField.classList.add("is-invalid");
+                            } else {
+                                passwordError.textContent = "";
+                                passwordField.classList.remove("is-invalid");
+                            }
+
+                            var confirmPasswordField = document.getElementById("confirmPassword");
+                            var confirmPasswordError = document.getElementById("confirmPasswordError");
+
+                            if (confirmPasswordField.value.trim() === "") {
+                                event.preventDefault(); // Prevent form submission
+                                confirmPasswordError.textContent = "ConfirmPassword cannot be empty.";
+                                passwordField.classList.add("is-invalid");
+                            } else {
+                                confirmPasswordError.textContent = "";
+                                confirmPasswordField.classList.remove("is-invalid");
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>

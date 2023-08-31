@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Asp.Net_MVC_GetSavvi.Models
 {
-    public class LoginModel
+    public class LoginCredentialsModel
     {
 
 

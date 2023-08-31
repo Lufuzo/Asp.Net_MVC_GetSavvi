@@ -25,15 +25,21 @@ namespace ServiceLayer.Service
             _loginContext = loginContext;
         }
 
-        public Task<string> Delete(int id)
+        public LoginCredentials Delete(int id, LoginCredentials login)
         {
-            throw new NotImplementedException();
+            var record = _loginContext.LoginEntities.Find(id);
+
+            _loginContext.LoginEntities.Remove(record);
+
+            _loginContext.SaveChanges();
+
+            return record;
         }
 
-        public async Task<LoginCredentials> GetById(int id)
+        public LoginCredentials GetById(int id)
         {
 
-            var record = await Task.Run(() => _loginContext.LoginEntities.Find(id));
+            var record =  _loginContext.LoginEntities.Find(id);
 
             return record;
 
@@ -44,12 +50,13 @@ namespace ServiceLayer.Service
             return await Task.Run(() => _loginContext.LoginEntities.ToList());
         }
 
-        public async Task<LoginCredentials> Insert(LoginCredentials login)
+        public LoginCredentials Insert(LoginCredentials login)
         {
             string mess = string.Empty;
 
             try {
-                await Task.Run(() => _loginContext.LoginEntities.Add(login));
+                _loginContext.LoginEntities.Add(login);
+                _loginContext.SaveChanges();
 
             }
             catch (Exception ex)
@@ -57,7 +64,7 @@ namespace ServiceLayer.Service
                 //  mess = "Failed  to create user";  
                 throw ex;
             }
-            _loginContext.SaveChanges();
+         
 
             return login;
 

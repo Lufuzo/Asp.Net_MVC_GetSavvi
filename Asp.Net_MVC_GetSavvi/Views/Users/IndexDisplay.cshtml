@@ -59,10 +59,11 @@
                 @*<td>
                     @Html.DisplayFor(modelItem => item.loginId)
                 </td>*@
-                <td>
-                    @Html.ActionLink("Edit", "Update", new { id = item.usersId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.usersId })
-                </td>
+            <td>
+
+               @Html.ActionLink("Edit", "Update", new { id = item.usersId }) |
+               @Html.ActionLink("Delete", "Delete", new { id = item.usersId })
+            </td>
             </tr>
         }
 

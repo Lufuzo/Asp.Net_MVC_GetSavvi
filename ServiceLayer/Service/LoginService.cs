@@ -23,12 +23,12 @@ namespace ServiceLayer.Service
         }
 
 
-        public Task<string> Delete(int id)
+        public LoginCredentials Delete(int id, LoginCredentials login)
         {
-            return loginRepository.Delete(id);
+            return loginRepository.Delete(id, login);
         }
 
-        public Task<LoginCredentials> GetById(int id)
+        public LoginCredentials GetById(int id)
         {
             return loginRepository.GetById(id);
         }
@@ -38,7 +38,7 @@ namespace ServiceLayer.Service
             return loginRepository.GetAll();
         }
 
-        public Task<LoginCredentials> Insert(LoginCredentials login)
+        public LoginCredentials Insert(LoginCredentials login)
         {
             return loginRepository.Insert(login);
         }

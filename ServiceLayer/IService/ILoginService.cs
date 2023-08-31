@@ -12,10 +12,10 @@ namespace ServiceLayer.IService
        
 
         Task<IEnumerable<LoginCredentials>> GetAll();
-         Task<LoginCredentials> GetById(int id);
-        Task<LoginCredentials> Insert(LoginCredentials login);
+         LoginCredentials GetById(int id);
+        LoginCredentials Insert(LoginCredentials login);
         Task<LoginCredentials> Update(int id, LoginCredentials login);
-        Task<string> Delete(int id);
+        LoginCredentials Delete(int id, LoginCredentials login);
         Task<LoginCredentials> GetLoginCredentialByUsername(string username);
         void UpdateLoggedUser(LoginCredentials loginCredentials);
     }
