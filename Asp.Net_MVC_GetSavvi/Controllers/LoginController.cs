@@ -134,6 +134,11 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
 
                         _loginService.Insert(loginEntity);
                     }
+                    else {
+                       ViewBag.ErrorMessage = "Password” length must be 8 characters or more\r\n5. “Password” must have at least 1 numeric, 1 upper case, 1 lower case character";
+                        return View();
+
+                    }
                 }
                 else
                 {
