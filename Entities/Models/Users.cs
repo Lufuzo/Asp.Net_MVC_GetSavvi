@@ -31,12 +31,23 @@ namespace Entities.Models
         [Required(ErrorMessage = " Please enter Email.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
-       
-      // [ForeignKey("")]
+
+        // [ForeignKey("")]
         //public int loginId { get; set; }
         //public LoginCredentials loginCredentials { get; set; }
 
+        #region extra fields
+     //  public string TransientField { get; set; }
+        [NotMapped]
+        public bool IsIdExists { get; set; }
+        #endregion
 
 
+        public Users()
+        {
+            IsIdExists = false;
+
+
+        }
     }
 }

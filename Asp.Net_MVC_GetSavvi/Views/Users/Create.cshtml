@@ -10,144 +10,145 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @*@if (!string.IsNullOrEmpty(ViewBag.LoginId))
-            {
-                <div class="alert alert-success">
-                    @ViewBag.LoginId
-                </div>
-            }*@
-        <form id="CrUsFrm" asp-action="Create" method="post">
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "Name", @placeholder = "Enter name" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    <small id="nameError" class="text-danger"></small>
-                </div>
+<div class="form-horizontal">
+    <hr />
+    @*@if (!string.IsNullOrEmpty(ViewBag.LoginId))
+        {
+            <div class="alert alert-success">
+                @ViewBag.LoginId
             </div>
+        }*@
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", @id = "Surname", @placeholder = "Enter surname" } })
-                    @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
-                    <small id="surnameError" class="text-danger"></small>
-                </div>
-            </div>
+<div> @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage)) { <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }</div>
+<form id="CrUsFrm" asp-action="Create" method="post">
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "Mobile", @placeholder = "Enter mobile" } })
-                    @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
-                    <small id="mobileError" class="text-danger"></small>
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.IdNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.IdNumber, new { htmlAttributes = new { @class = "form-control", @id = "IdNumber", @placeholder = "Enter idNumber" } })
-                    @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
-                    <small id="idNumberError" class="text-danger"></small>
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Enter  email" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    <small id="emailError" class="text-danger"></small>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    @*<input type="submit" value="Create" class="btn btn-default" />*@
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
-            </div>
-        </form>
-
-        <script>
-            document.getElementById("CrUsFrm").addEventListener("submit", function (event) {
-                var nameField = document.getElementById("Name");
-                var nameError = document.getElementById("nameError");
-
-                if (usernameField.value.trim() === "") {
-                    event.preventDefault(); // Prevent form submission
-                    nameError.textContent = "Name cannot be empty.";
-                    nameField.classList.add("is-invalid");
-                } else {
-                    nameError.textContent = "";
-                    nameField.classList.remove("is-invalid");
-                }
-
-                var surnameField = document.getElementById("Surname");
-                var surnameError = document.getElementById("surnameError");
-
-                if (surnameField.value.trim() === "") {
-                    event.preventDefault(); // Prevent form submission
-                    surnameError.textContent = "Surname cannot be empty.";
-                    surnameField.classList.add("is-invalid");
-                } else {
-                    surnameError.textContent = "";
-                    surnameField.classList.remove("is-invalid");
-                }
-
-                var mobileField = document.getElementById("Mobile");
-                var mobileError = document.getElementById("mobilePasswordError");
-
-                if (mobileField.value.trim() === "") {
-                    event.preventDefault(); // Prevent form submission
-                    mobileError.textContent = "Mobile cannot be empty.";
-                    mobileField.classList.add("is-invalid");
-                } else {
-                    mobileError.textContent = "";
-                    mobileField.classList.remove("is-invalid");
-                }
-
-                var idNumberField = document.getElementById("IdNumber");
-                var idNumberError = document.getElementById("idNumberError");
-
-                if (idNumberField.value.trim() === "") {
-                    event.preventDefault(); // Prevent form submission
-                    idNumberError.textContent = "IdNumber cannot be empty.";
-                    idNumberField.classList.add("is-invalid");
-                } else {
-                    idNumberError.textContent = "";
-                    idNumberField.classList.remove("is-invalid");
-                }
-
-                var emailField = document.getElementById("Email");
-                var emailError = document.getElementById("emailError");
-
-                if (emailField.value.trim() === "") {
-                    event.preventDefault(); // Prevent form submission
-                    <a href="~/Views/Users/IndexDisplay.cshtml">~/Views/Users/IndexDisplay.cshtml</a>
-                    emailError.textContent = "Email cannot be empty.";
-                    emailField.classList.add("is-invalid");
-                } else {
-                    emailError.textContent = "";
-                    emailField.classList.remove("is-invalid");
-                }
-            });
-        </script>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "Name", @placeholder = "Enter name" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <small id="nameError" class="text-danger"></small>
+        </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "IndexDisplay", "Users")
+    <div class="form-group">
+        @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", @id = "Surname", @placeholder = "Enter surname" } })
+            @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+            <small id="surnameError" class="text-danger"></small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "Mobile", @placeholder = "Enter mobile" } })
+            @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+            <small id="mobileError" class="text-danger"></small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IdNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IdNumber, new { htmlAttributes = new { @class = "form-control", @id = "IdNumber", @placeholder = "Enter idNumber" } })
+            @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
+            <small id="idNumberError" class="text-danger"></small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "Email", @placeholder = "Enter  email" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            <small id="emailError" class="text-danger"></small>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @*<input type="submit" value="Create" class="btn btn-default" />*@
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "IndexDisplay", "Users")
+    </div>
+
+</form>
+
+    <script>
+        document.getElementById("CrUsFrm").addEventListener("submit", function (event) {
+            var nameField = document.getElementById("Name");
+            var nameError = document.getElementById("nameError");
+
+            if (usernameField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                nameError.textContent = "Name cannot be empty.";
+                nameField.classList.add("is-invalid");
+            } else {
+                nameError.textContent = "";
+                nameField.classList.remove("is-invalid");
+            }
+
+            var surnameField = document.getElementById("Surname");
+            var surnameError = document.getElementById("surnameError");
+
+            if (surnameField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                surnameError.textContent = "Surname cannot be empty.";
+                surnameField.classList.add("is-invalid");
+            } else {
+                surnameError.textContent = "";
+                surnameField.classList.remove("is-invalid");
+            }
+
+            var mobileField = document.getElementById("Mobile");
+            var mobileError = document.getElementById("mobilePasswordError");
+
+            if (mobileField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                mobileError.textContent = "Mobile cannot be empty.";
+                mobileField.classList.add("is-invalid");
+            } else {
+                mobileError.textContent = "";
+                mobileField.classList.remove("is-invalid");
+            }
+
+            var idNumberField = document.getElementById("IdNumber");
+            var idNumberError = document.getElementById("idNumberError");
+
+            if (idNumberField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                idNumberError.textContent = "IdNumber cannot be empty.";
+                idNumberField.classList.add("is-invalid");
+            } else {
+                idNumberError.textContent = "";
+                idNumberField.classList.remove("is-invalid");
+            }
+
+            var emailField = document.getElementById("Email");
+            var emailError = document.getElementById("emailError");
+
+            if (emailField.value.trim() === "") {
+                event.preventDefault(); // Prevent form submission
+                <a href="~/Views/Users/IndexDisplay.cshtml">~/Views/Users/IndexDisplay.cshtml</a>
+                emailError.textContent = "Email cannot be empty.";
+                emailField.classList.add("is-invalid");
+            } else {
+                emailError.textContent = "";
+                emailField.classList.remove("is-invalid");
+            }
+        });
+    </script>
 </div>
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @ViewBag.ErrorMessage
-    </div>
 }
+

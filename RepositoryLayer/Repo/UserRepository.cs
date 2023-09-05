@@ -61,8 +61,10 @@ namespace ServiceLayer.Service
                 bool isDuplicate = _usersContext.Users.Any(u => u.IdNumber == users.IdNumber);
                 if (isDuplicate)
                 {
-                   
-                    return  users;
+                    users.IsIdExists = true;
+
+
+                    return users;
                 }
                
                  _usersContext.Users.Add(users);

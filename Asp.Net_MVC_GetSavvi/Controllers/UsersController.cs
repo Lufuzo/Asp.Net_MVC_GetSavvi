@@ -65,34 +65,44 @@ namespace Asp.Net_MVC_GetSavvi.Controllers
             Users user = new Users();
 
             var result = IsValid(useModel.IdNumber);
-            if (result == true)
+            if (user.IsIdExists == false)
             {
-                user.Name = useModel.Name;
-                user.Surname = useModel.Surname;
-                user.IdNumber = useModel.IdNumber;
-                user.Email = useModel.Email;
-
-                //checking the phone number if its valvalid
-                if (useModel.Mobile == null || !(useModel.Mobile is string mobile))
+                if (result == true)
                 {
-                    ViewBag.ErrorMessage = "Phone Number is not valid";
+                    user.Name = useModel.Name;
+                    user.Surname = useModel.Surname;
+                    user.IdNumber = useModel.IdNumber;
+                    user.Email = useModel.Email;
+
+                    //checking the phone number if its valvalid
+                    if (useModel.Mobile == null || !(useModel.Mobile is string mobile))
+                    {
+                        ViewBag.ErrorMessage = "Phone Number is not valid";
+                        return View();
+                    }
+                    // checking the leading zero
+                    if (useModel.Mobile.StartsWith("0"))
+                    {
+                        // replacing leading zero with 27
+                        useModel.Mobile = "27" + useModel.Mobile.Substring(1);
+
+                        user.Mobile = useModel.Mobile;
+                        _userService.Insert(user);
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "ID Number is not valid";
                     return View();
-                }
-                // checking the leading zero
-                if (useModel.Mobile.StartsWith("0"))
-                {
-                    // replacing leading zero with 27
-                    useModel.Mobile = "27" + useModel.Mobile.Substring(1);
 
-                    user.Mobile = useModel.Mobile;
-                    _userService.Insert(user);
                 }
+               
             }
-            else
+           
+            if (user.IsIdExists == true)
             {
-                ViewBag.ErrorMessage = "ID Number is not valid";
-                return View();
-
+                ViewBag.ErrorMessage = "Id Number already exists in the database ";
+                return RedirectToAction("Create");
             }
 
             return RedirectToAction("IndexDisplay");
